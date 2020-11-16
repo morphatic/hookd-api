@@ -40,6 +40,9 @@ module.exports = function (app) {
     // Define associations here
     // See http://docs.sequelizejs.com/en/latest/docs/associations/
     users.belongsToMany(models.locations, { through: 'spots' });
+    users.hasMany(models.posts, { foreignKey: { field: 'userId', allowNull: false }, onDelete: 'cascade' });
+    users.belongsToMany(models.posts, { through: 'likes'} );
+    users.belongsToMany(models.users, { through: 'friends', as: 'friend' } );
   };
 
   return users;
