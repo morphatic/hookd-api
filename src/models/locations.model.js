@@ -5,27 +5,32 @@ const DataTypes = Sequelize.DataTypes;
 
 module.exports = function (app) {
   const sequelizeClient = app.get('sequelizeClient');
-  const users = sequelizeClient.define('users', {
-    email: {
+  const locations = sequelizeClient.define('locations', {
+    name: {
       type: DataTypes.STRING,
-      allowNull: false, // this means field is required
+      allowNull: false,
       unique: true
     },
-    username: {
-      type: DataTypes.STRING,
-      unique: true
-    },
-    first_name: {
+    street: {
       type: DataTypes.STRING
     },
-    last_name: {
+    city: {
       type: DataTypes.STRING
     },
-    password: {
+    state: {
       type: DataTypes.STRING
     },
-    phone: {
+    zip: {
       type: DataTypes.STRING
+    },
+    type: {
+      type: DataTypes.ENUM(['lake', 'river', 'ocean'])
+    },
+    lat: {
+      type: DataTypes.FLOAT
+    },
+    lon: {
+      type: DataTypes.FLOAT
     },
   }, {
     hooks: {
@@ -36,11 +41,11 @@ module.exports = function (app) {
   });
 
   // eslint-disable-next-line no-unused-vars
-  users.associate = function (models) {
+  locations.associate = function (models) {
     // Define associations here
     // See http://docs.sequelizejs.com/en/latest/docs/associations/
-    users.belongsToMany(models.locations, { through: 'spots' });
+    locations.belongsToMany(models.users, { through: 'spots' });
   };
 
-  return users;
+  return locations;
 };
